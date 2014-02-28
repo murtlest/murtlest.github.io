@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		
+		
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Hello, world!</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<textarea id="input" class="form-control" rows="20"></textarea>
+				</div>
+				<div class="col-md-6">
+					<textarea id="output" disabled class="form-control" rows="20"></textarea>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+
+$( document ).ready(function() {
+	if(typeof(Storage)!=="undefined"){
+		$('#input').val(localStorage.input);
+		parseInput();	
+	}
+});
+
+$('#input').bind('change keyup', parseInput);
+
+function parseInput(){
+	var input = $('#input').val();
+	var lines = input.match(/[^\r\n]+/g);
+
+	var properties = new Array();
+	for(var i in lines){
+		var line = lines[i];
+		var parts = line.match(/[^\s]+/g);
+		console.log(parts);
+		if(parts && parts.length == 3){
+			var type = parts[0];
+			var name = parts[1];
+			var dbField = parts[2];
+			var property = {};
+			property.type = type;
+			property.name = name;
+			property.dbField = dbField;
+			properties.push(property);
+		}
+	}
+
+	renderClass(properties);
+
+	if(typeof(Storage)!=="undefined"){
+		localStorage.setItem("input", input);	
+	}
+	
+}
+
+function renderClass(properties){
+	var code = "";
+	code += "class Test {\n\n";
+	for(var i in properties){
+		code += "\tprivate $" + properties[i].name + ";\n";
+	}
+
+	code += "\n";
+	code += "\tpublic function __construct(";
+	var extra = '';
+	for(var i in properties){
+		code += extra + properties[i].type + ' $' + properties[i].name;
+		extra = ', ';
+	}
+	code += "){\n";
+
+	for(var i in properties){
+		code += '\t\t$this->' + properties[i].name + ' = $' + properties[i].name + ";\n";
+	}
+	
+	code += "\t}\n";
+	
+	code += "\n";
+
+	for(var i in properties){
+		code += '\tpublic function get' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(){\n';
+		code += '\t\treturn $this->' + properties[i].name + ';\n';
+		code += '\t}\n\n';
+
+		if(properties[i].type=='Boolean'){
+			code += '\tpublic function is' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(){\n';
+			code += '\t\treturn $this->' + properties[i].name + '->isTrue();\n';
+			code += '\t}\n\n';
+		}
+	}
+	
+	
+	code += '\tpublic static function getFromAssociativeArray($a){\n';
+	for(var i in properties){
+		code += '\t\t$' + properties[i].name + ' = new ' + properties[i].type + "($a['" + properties[i].dbField + "']);\n";
+	}
+	code += '\n';
+	code += '\t\treturn new self(';
+	extra = '';
+	for(var i in properties){
+		code += extra + '$' + properties[i].name;
+		extra = ', ';
+	}
+	code += ');\n';
+	
+	code += '\t}\n';
+
+	code += '}\n';
+	
+	$('#output').val(code);
+}
+		</script>
+	</body>
+</html>
