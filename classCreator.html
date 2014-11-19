@@ -55,14 +55,16 @@ function parseInput(){
 		var line = lines[i];
 		var parts = line.match(/[^\s]+/g);
 		console.log(parts);
-		if(parts && parts.length == 3){
+		if(parts && parts.length >= 3){
 			var type = parts[0];
 			var name = parts[1];
 			var dbField = parts[2];
+			var editable = parts.length>3 && parts[3]=='*';
 			var property = {};
 			property.type = type;
 			property.name = name;
 			property.dbField = dbField;
+			property.editable = editable;
 			properties.push(property);
 		}
 	}
@@ -107,6 +109,12 @@ function renderClass(properties){
 		if(properties[i].type=='Boolean'){
 			code += '\tpublic function is' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(){\n';
 			code += '\t\treturn $this->' + properties[i].name + '->isTrue();\n';
+			code += '\t}\n\n';
+		}
+		
+		if(properties[i].editable){
+			code += '\tpublic function set' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(' + properties.type + ' $' + properties.name'){\n';
+			code += '\t\t$this->' + properties[i].name + ' = $' + properties.name + ';\n';
 			code += '\t}\n\n';
 		}
 	}
