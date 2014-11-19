@@ -113,8 +113,8 @@ function renderClass(properties){
 		}
 		
 		if(properties[i].editable){
-			code += '\tpublic function set' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(' + properties.type + ' $' + properties.name + '){\n';
-			code += '\t\t$this->' + properties[i].name + ' = $' + properties.name + ';\n';
+			code += '\tpublic function set' + properties[i].name.charAt(0).toUpperCase() + properties[i].name.slice(1) + '(' + properties[i].type + ' $' + properties[i].name + '){\n';
+			code += '\t\t$this->' + properties[i].name + ' = $' + properties[i].name + ';\n';
 			code += '\t}\n\n';
 		}
 	}
