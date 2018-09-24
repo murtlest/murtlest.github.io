@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="sv" ng-app="app">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.min.js"></script>
+    <script src="sip-0.11.3.min.js"></script>
+<script>
+angular.module('app', [])
+.controller('DesignMockup', ['$scope','$http', function ($scope, $http){
+
+  $scope.currentPhoneNumer = '+46709515359';
+  $scope.activeCall = false;
+
+  $scope.cart = false;
+
+  $scope.lightbox = false;
+
+  $scope.lightboxes = {
+    menu: false
+  }
+
+  $scope.light = function(name){
+    $scope.lightbox = true;
+    $scope.lightboxes[name] = true;
+  };
+
+  $scope.closeLight = function(){
+    $scope.lightbox = false;
+    for(var i in $scope.lightboxes){
+      $scope.lightboxes[i] = false;
+    }
+  }
+
+
+  $scope.outinnumber = "+46766860672";
+  $scope.session = {"status":0};
+  $scope.userAgent = new SIP.UA({ 
+      transportOptions: {
+        wsServers: [
+          'wss://api.46elks.com/a1/webrtc/ws',
+          'wss://bpi.46elks.com/a1/webrtc/ws',
+          'wss://cpi.46elks.com/a1/webrtc/ws']
+        },
+        uri: '46766860672@voip.46elks.com',
+        authorizationUser: '46766860672',
+        password: 'AAAAAAAAAAAAAAAAAAAAAAAAAA',
+        registerExpires: 60,
+        sessionDescriptionHandlerFactoryOptions: {
+          constraints: {
+            audio: true,
+            video: false
+          }
+        }
+      }
+  );
+
+
+  // Initiate ring sound
+  $scope.ringAudio = new Audio('mp3_bass.mp3');
+  $scope.ringAudio.loop = true;
+
+
+    // Add sound from the remote caller to the browser.
+  $scope.addSound = function(){
+    var domElement = document.getElementById('audio');
+    var pc = $scope.session.sessionDescriptionHandler.peerConnection;
+    var remoteStream = new MediaStream();
+    pc.getReceivers().forEach(
+      function(receiver) {
+        var track = receiver.track;
+        if (track) {
+          remoteStream.addTrack(track);
+        }
+      }
+    );
+    domElement.srcObject = remoteStream;
+    domElement.play();
+  }
+
+  $scope.userAgent.on('invite', 
+    function (incomingSession) {
+      // If call is ongloing terminate new call.
+      if ($scope.session.status == 12) {
+        incomingSession.terminate()
+        return;
+      }
+
+      // Set global call to incomming call.
+      $scope.session = incomingSession;
+
+      // Add sound to browser when call is connected.
+      $scope.session.on('accepted', $scope.addsound);
+
+      // If the call is comming from self (outgoing call)
+      // make automatic pickup.
+      if($scope.session.remoteIdentity.uri.user == outinnumber){
+        $scope.session.accept();
+        $scope.activeCall = true;
+      }
+      // In other case play ringtone.
+      else {
+        $scope.ringAudio.play();
+      }
+    }
+  );
+
+  $scope.hangUp = function(){
+    $scope.activeCall = false;
+    if($scope.session && $scope.session.status!=0){
+      $scope.session.terminate();
+    }
+  }
+
+  // Initate outgoing all with a request to the API for call.
+  $scope.startCall = function(to) {
+    $scope.activeCall = true;
+    var domElement = document.getElementById('audio');
+    domElement.play();
+    /*
+    $http(
+      {
+        "method":"post",
+        "withCredentials": true,
+        "headers":{ 'Authorization':  'Basic ' + btoa("test" + ":" + "test")},
+        "url":"https://api.46elks.com/a1/calls",
+        "data":{
+          voice_start: '{"connect":"'+to+'"}',
+          to: to,
+          from: $scope.outinnumber     
+        }
+      }
+    ).success(
+      function(data){
+        console.log(data);
+      }
+    ).error(
+      function(error){
+        console.log('error');
+        console.log(error);
+      }
+    );
+    */
+  }
+
+
+
+
+}]);
+</script>
+
+  <link rel="stylesheet" href="style.css">
+
+  <title>Hello, world!</title>
+</head>
+<body ng-controller="DesignMockup" ng-cloak>
+  <div id="phone">
+    <div class="row">
+        <div class="col">
+          <input id="phoneNumber" type="text" ng-model="currentPhoneNumer" />
+        </div>
+    </div>
+    <div class="btn-row">
+      <a href="" class="btn-phone">1</a>
+      <a href="" class="btn-phone">2</a>
+      <a href="" class="btn-phone">3</a>
+    </div>
+    <div class="btn-row">
+      <a href="" class="btn-phone">4</a>
+      <a href="" class="btn-phone">5</a>
+      <a href="" class="btn-phone">6</a>
+    </div>
+    <div class="btn-row">
+      <a href="" class="btn-phone">7</a>
+      <a href="" class="btn-phone">8</a>
+      <a href="" class="btn-phone">9</a>
+    </div>
+    <div class="btn-row">
+      <a href="" class="btn-phone">*</a>
+      <a href="" class="btn-phone">0</a>
+      <a href="" class="btn-phone">#</a>
+    </div>
+    <div class="text-center">
+      <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumer)">call</a>
+      <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
+    </div>
+
+  </div>
+  
+  <audio id="audio"></audio>
+
+  <div id="lightbox" ng-click="closeLight()" class="invisible" ng-class="{invisible:!lightbox}"></div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+</html>
