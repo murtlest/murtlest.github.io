@@ -99,11 +99,13 @@ angular.module('app', [])
       // Add sound to browser when call is connected.
       $scope.session.on('accepted', $scope.addSound);
 
+
+      $scope.activeCall = true;
+
       // If the call is comming from self (outgoing call)
       // make automatic pickup.
       if($scope.session.remoteIdentity.uri.user == $scope.outinnumber){
         $scope.session.accept();
-        $scope.activeCall = true;
       }
       // In other case play ringtone.
       else {
