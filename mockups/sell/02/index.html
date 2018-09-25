@@ -87,6 +87,12 @@ angular.module('app', [])
     domElement.play();
   }
 
+  $scope.userAgent.on('message', function(message){
+    console.log('incoming message: ');
+    console.log(message);
+
+  });
+
   $scope.userAgent.on('invite', 
     function (incomingSession) {
 
@@ -104,6 +110,17 @@ angular.module('app', [])
       // Add sound to browser when call is connected.
       $scope.session.on('accepted', $scope.addSound);
 
+      $scope.session.on('failed', function(request){
+
+        $scope.activeCall = false;
+        var cause = request.cause; //sometimes this is request.reason_phrase
+        if (cause === SIP.C.causes.REJECTED) {
+          console.log('rejected');
+
+        }
+
+        $scope.$apply();
+      });
 
       $scope.activeCall = true;
 
@@ -209,7 +226,7 @@ angular.module('app', [])
     <div class="text-center">
       <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumber)">call</a>
       <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
-      <a href="" class="backspace" ng-click="erase()"><i class="fas fa-backspace"></i></a>
+      <a href="" class="backspace" ng-click="erase()" ng-if="currentPhoneNumber!=''"><i class="fas fa-backspace"></i></a>
     </div>
 
   </div>
