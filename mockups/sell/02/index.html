@@ -87,6 +87,9 @@ angular.module('app', [])
 
   $scope.userAgent.on('invite', 
     function (incomingSession) {
+
+      console.log('INCOMING SESSION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
       // If call is ongloing terminate new call.
       if ($scope.session.status == 12) {
         incomingSession.terminate()
