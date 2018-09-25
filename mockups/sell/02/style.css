@@ -205,6 +205,7 @@ body {
   border-radius: 40px;
   width: 300px;
   min-height: 600px;
+  height: 600px;
   margin: auto;
   vertical-align: middle;
   position: fixed;
@@ -216,7 +217,29 @@ body {
 }
 
 #phone:hover {
-  box-shadow: 0px 2px 2px rgba(0,0,0,0.4);
+  box-shadow: 0px 2px 2px rgba(0,0,0,0.6);
+}
+
+#phone.incoming {
+  background: linear-gradient(270deg, #d6f5ed, #f6e8ff);
+  background-size: 200% 200%;
+
+  -webkit-animation: incomingBg 2s ease infinite;
+  -moz-animation: incomingBg 2s ease infinite;
+  animation: incomingBg 2s ease infinite;
+}
+
+#incoming {
+  height: 100%;
+  font-size: 28px;
+  font-weight: 100;
+  padding-top: 80px;
+}
+
+#incoming .buttons {
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
 }
 
 #phoneNumber {
@@ -227,32 +250,35 @@ body {
   text-align: right;
   width: 244px;
   margin: auto;
-  margin-top: 60px;
+  margin-top: 100px;
   margin-left: 28px;
   margin-right: 28px;
+  margin-bottom: 20px;
   color: #666;
 }
 .btn-row {
-  margin: 28px;
+  margin: 10px 45px;
 }
 
 .btn-phone {
   display: inline-block;
-  width: 65px;
-  height: 65px;
-  border-radius: 65px;
-  background: #444;
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  background: rgba(60,60,60,0.8);
   color: #fff;
   text-align: center;
   vertical-align: middle;
-  line-height: 65px;
-  font-size: 18px;
-  margin-right: 20px;
+  line-height: 60px;
+  font-size: 20px;
+  font-weight: lighter;
+  margin-right: 10px;
 }
 .btn-phone:last-child {
   margin-right: 0;
 }
 .btn-phone:hover {
+  background: rgba(60,60,60,1);
   color: #fff;
   text-decoration: none;
 }
@@ -279,6 +305,7 @@ body {
   font-size: 28px;
   box-shadow: inset 0px 0px 20px 6px rgba(0,0,0,0.15);
   margin-bottom: 30px;
+  margin-top: 40px;
 }
 
 .btn-hangup {
@@ -289,6 +316,39 @@ body {
 .btn-call:hover, .btn-hangup:hover {
   color: #fff;
 }
+
+
+
+
+
+
+@-webkit-keyframes incomingBg {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes incomingBg {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes incomingBg { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .box {
