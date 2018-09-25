@@ -29,6 +29,7 @@ angular.module('app', [])
 
   $scope.login = function(password){
     $scope.loggedIn = true;
+    $scope.password = password;
 
     $scope.userAgent = new SIP.UA({ 
         transportOptions: {
@@ -197,6 +198,7 @@ angular.module('app', [])
   <title>Hello, world!</title>
 </head>
 <body ng-controller="DesignMockup" ng-cloak>
+  
   <div id="phone" ng-class="{incoming:incoming, active:activeCall}">
     <div id="login" ng-if="!loggedIn">
         <p class="text-center">
