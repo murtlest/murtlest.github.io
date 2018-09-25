@@ -52,7 +52,9 @@ angular.module('app', [])
         uri: '4600100089@voip.46elks.com',
         authorizationUser: '4600100089',
         password: '6492AF9B85EB5EB22A67F556E6ADD6B2',
-        registerExpires: 60,
+        registerExpires: 600,
+        displayName: "KG",
+        traceSip: true,
         sessionDescriptionHandlerFactoryOptions: {
           constraints: {
             audio: true,
@@ -108,10 +110,12 @@ angular.module('app', [])
       // If the call is comming from self (outgoing call)
       // make automatic pickup.
       if($scope.session.remoteIdentity.uri.user == $scope.outinnumber){
+        console.log('self initiated call');
         $scope.session.accept();
       }
       // In other case play ringtone.
       else {
+        console.log('incoming call');
         $scope.ringAudio.play();
       }
 
