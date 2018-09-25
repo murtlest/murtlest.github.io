@@ -149,7 +149,7 @@ angular.module('app', [])
         $scope.incoming = true;
         $scope.ringAudio.play();
         $scope.$apply();
-        console.log($scope.session);
+        console.log(JSON.stringify($scope.session));
       }
 
       $scope.$apply();
@@ -167,7 +167,7 @@ angular.module('app', [])
 
   $scope.answer = function(){
     $scope.incoming = false;
-    $scope.ringAudio.stop();
+    $scope.ringAudio.pause();
     $scope.session.accept();
   }
 
