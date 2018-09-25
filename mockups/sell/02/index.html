@@ -110,6 +110,22 @@ angular.module('app', [])
       // Add sound to browser when call is connected.
       $scope.session.on('accepted', $scope.addSound);
 
+      $scope.session.on('bye', function(message){
+        console.log('bye');
+        console.log(message);
+        $scope.activeCall = false;
+      });
+      $scope.session.on('bye', function(message){
+        console.log('bye');
+        console.log(message);
+        $scope.activeCall = false;
+      });
+      $scope.session.on('cancel', function(message){
+        console.log('cancel');
+        console.log(message);
+        $scope.activeCall = false;
+      });
+      
       $scope.session.on('failed', function(request){
 
         $scope.activeCall = false;
