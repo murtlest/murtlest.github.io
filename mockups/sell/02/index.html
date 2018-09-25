@@ -16,86 +16,47 @@
 angular.module('app', [])
 .controller('DesignMockup', ['$scope','$http', function ($scope, $http){
 
+  $scope.loggedIn = false;
+
   $scope.currentPhoneNumber = '+46709515359';
   $scope.activeCall = false;
   $scope.incoming = false;
 
-  $scope.cart = false;
-
-  $scope.lightbox = false;
-
-  $scope.lightboxes = {
-    menu: false
-  }
-
-  $scope.light = function(name){
-    $scope.lightbox = true;
-    $scope.lightboxes[name] = true;
-  };
-
-  $scope.closeLight = function(){
-    $scope.lightbox = false;
-    for(var i in $scope.lightboxes){
-      $scope.lightboxes[i] = false;
-    }
-  }
-
-
   $scope.outinnumber = "+46766860672";
   $scope.session = {"status":0};
-  $scope.userAgent = new SIP.UA({ 
-      transportOptions: {
-        wsServers: [
-          'wss://api.46elks.com/a1/webrtc/ws',
-          'wss://bpi.46elks.com/a1/webrtc/ws',
-          'wss://cpi.46elks.com/a1/webrtc/ws']
-        },
-        uri: '4600100089@voip.46elks.com',
-        authorizationUser: '4600100089',
-        password: '6492AF9B85EB5EB22A67F556E6ADD6B2',
-        registerExpires: 600,
-        displayName: "KG",
-        traceSip: true,
-        sessionDescriptionHandlerFactoryOptions: {
-          constraints: {
-            audio: true,
-            video: false
+
+
+  $scope.login = function(password){
+    $scope.loggedIn = true;
+
+    $scope.userAgent = new SIP.UA({ 
+        transportOptions: {
+          wsServers: [
+            'wss://api.46elks.com/a1/webrtc/ws',
+            'wss://bpi.46elks.com/a1/webrtc/ws',
+            'wss://cpi.46elks.com/a1/webrtc/ws']
+          },
+          uri: '4600100089@voip.46elks.com',
+          authorizationUser: '4600100089',
+          password: password,
+          registerExpires: 600,
+          displayName: "KG",
+          traceSip: true,
+          sessionDescriptionHandlerFactoryOptions: {
+            constraints: {
+              audio: true,
+              video: false
+            }
           }
         }
-      }
-  );
-
-
-  // Initiate ring sound
-  $scope.ringAudio = new Audio('mp3_bass.mp3');
-  $scope.ringAudio.loop = true;
-
-
-    // Add sound from the remote caller to the browser.
-  $scope.addSound = function(){
-    var domElement = document.getElementById('audio');
-    var pc = $scope.session.sessionDescriptionHandler.peerConnection;
-    var remoteStream = new MediaStream();
-    pc.getReceivers().forEach(
-      function(receiver) {
-        var track = receiver.track;
-        if (track) {
-          remoteStream.addTrack(track);
-        }
-      }
     );
-    domElement.srcObject = remoteStream;
-    domElement.play();
-  }
 
-  $scope.userAgent.on('message', function(message){
-    console.log('incoming message: ');
-    console.log(message);
+    $scope.userAgent.on('message', function(message){
+      console.log('incoming message: ');
+      console.log(message);
+    });
 
-  });
-
-  $scope.userAgent.on('invite', 
-    function (incomingSession) {
+    $scope.userAgent.on('invite', function (incomingSession) {
 
       console.log('INCOMING SESSION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
@@ -115,7 +76,6 @@ angular.module('app', [])
         console.log('bye');
         console.log(message);
         $scope.activeCall = false;
-        $scope.$apply();
       });
       $scope.session.on('cancel', function(message){
         console.log('cancel');
@@ -154,8 +114,36 @@ angular.module('app', [])
 
       $scope.$apply();
 
-    }
-  );
+    });
+
+  }
+
+
+
+
+  // Initiate ring sound
+  $scope.ringAudio = new Audio('mp3_bass.mp3');
+  $scope.ringAudio.loop = true;
+
+
+    // Add sound from the remote caller to the browser.
+  $scope.addSound = function(){
+    var domElement = document.getElementById('audio');
+    var pc = $scope.session.sessionDescriptionHandler.peerConnection;
+    var remoteStream = new MediaStream();
+    pc.getReceivers().forEach(
+      function(receiver) {
+        var track = receiver.track;
+        if (track) {
+          remoteStream.addTrack(track);
+        }
+      }
+    );
+    domElement.srcObject = remoteStream;
+    domElement.play();
+  }
+
+  
 
   $scope.hangUp = function(){
     $scope.activeCall = false;
@@ -177,6 +165,16 @@ angular.module('app', [])
     $scope.activeCall = true;
     var domElement = document.getElementById('audio');
     domElement.play();
+
+    $http.get('https://orders.tctc.se/phone/call?from='+escape($scope.outinnumber)+'&to='escape($scope.currentPhoneNumber)+'&secret='+$scope.password).success(
+      function(response){
+        console.log(response);
+      }
+    )
+    .error(function(error){
+      console.log(error);
+    });
+
   }
 
   $scope.type = function(str){
@@ -198,6 +196,15 @@ angular.module('app', [])
 </head>
 <body ng-controller="DesignMockup" ng-cloak>
   <div id="phone" ng-class="{incoming:incoming, active:activeCall}">
+    <div id="login" ng-if="!loggedIn">
+        <p class="text-center">
+            Password
+        </p>
+        <input type="text" ng-model="password" placeholder="Type here..." />
+        <div class="buttons text-center">
+          <a href="" class="btn-call" ng-click="login(password)"><i class="fas fa-sign-in-alt"></i></a>
+        </div>
+    </div>
     <div id="incoming" ng-if="incoming">
       <p class="text-center">
         Incoming
@@ -211,19 +218,19 @@ angular.module('app', [])
         <a href="" class="btn-hangup" ng-click="hangUp()"><i class="fas fa-times"></i></a>
       </div>
     </div>
-    <div class="row" ng-if="!incoming">
+    <div class="row" ng-if="!incoming && loggedIn">
         <div class="col">
           <input id="phoneNumber" type="text" ng-model="currentPhoneNumber" />
         </div>
     </div>
-    <div id="keys" ng-if="activeCall">
+    <div id="keys" ng-if="activeCall && !incoming && loggedIn">
       <div class="btn-row">
         <a href="" class="btn-phone" ng-click="mute()"><i class="fas fa-microphone-slash"></i></a>
         <a href="" class="btn-phone" ng-click="showKeys()"><i class="fas fa-th"></i></a>
         <a href="" class="btn-phone" ng-click="type(3)"><i class="fas fa-volume-up"></i></a>
       </div>      
     </div>
-    <div id="keys" ng-if="!incoming && !activeCall">
+    <div id="keys" ng-if="!incoming && !activeCall && loggedIn">
       <div class="btn-row">
         <a href="" class="btn-phone" ng-click="type(1)">1</a>
         <a href="" class="btn-phone" ng-click="type(2)">2</a>
@@ -245,7 +252,7 @@ angular.module('app', [])
         <a href="" class="btn-phone" ng-click="type('#')">#</a>
       </div>
     </div>
-    <div ng-if="!incoming" class="text-center buttons">
+    <div ng-if="!incoming && loggedIn" class="text-center buttons">
       <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumber)">call</a>
       <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
       <a href="" class="backspace" ng-click="erase()" ng-if="currentPhoneNumber!=''"><i class="fas fa-backspace"></i></a>

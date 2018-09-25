@@ -46,6 +46,22 @@ body {
   animation: incomingBg 2s ease infinite;
 }
 
+#login {
+  height: 100%;
+  font-size: 28px;
+  font-weight: 100;
+  padding-top: 80px;  
+}
+
+#login input {
+  background: transparent;
+  border: 0;
+  margin: 30px;
+  width: 240px;
+  font-size: 12px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
 
 #incoming {
   height: 100%;
@@ -83,7 +99,7 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  background: rgba(60,60,60,0.4);
+  background: rgba(60,60,60,0.3);
   color: #fff;
   text-align: center;
   vertical-align: middle;
