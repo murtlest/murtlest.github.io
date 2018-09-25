@@ -16,7 +16,7 @@
 angular.module('app', [])
 .controller('DesignMockup', ['$scope','$http', function ($scope, $http){
 
-  $scope.currentPhoneNumer = '+46709515359';
+  $scope.currentPhoneNumber = '+46709515359';
   $scope.activeCall = false;
 
   $scope.cart = false;
@@ -150,8 +150,12 @@ angular.module('app', [])
     */
   }
 
-
-
+  $scope.type = function(str){
+    $scope.currentPhoneNumber += str;
+  }
+  $scope.erase = function(){
+    $scope.currentPhoneNumber = $scope.currentPhoneNumber.slice(0,-1);
+  }
 
 }]);
 </script>
@@ -164,32 +168,33 @@ angular.module('app', [])
   <div id="phone">
     <div class="row">
         <div class="col">
-          <input id="phoneNumber" type="text" ng-model="currentPhoneNumer" />
+          <input id="phoneNumber" type="text" ng-model="currentPhoneNumber" />
         </div>
     </div>
     <div class="btn-row">
-      <a href="" class="btn-phone">1</a>
-      <a href="" class="btn-phone">2</a>
-      <a href="" class="btn-phone">3</a>
+      <a href="" class="btn-phone" ng-click="type(1)">1</a>
+      <a href="" class="btn-phone" ng-click="type(2)">2</a>
+      <a href="" class="btn-phone" ng-click="type(3)">3</a>
     </div>
     <div class="btn-row">
-      <a href="" class="btn-phone">4</a>
-      <a href="" class="btn-phone">5</a>
-      <a href="" class="btn-phone">6</a>
+      <a href="" class="btn-phone" ng-click="type(4)">4</a>
+      <a href="" class="btn-phone" ng-click="type(5)">5</a>
+      <a href="" class="btn-phone" ng-click="type(6)">6</a>
     </div>
     <div class="btn-row">
-      <a href="" class="btn-phone">7</a>
-      <a href="" class="btn-phone">8</a>
-      <a href="" class="btn-phone">9</a>
+      <a href="" class="btn-phone" ng-click="type(7)">7</a>
+      <a href="" class="btn-phone" ng-click="type(8)">8</a>
+      <a href="" class="btn-phone" ng-click="type(9)">9</a>
     </div>
     <div class="btn-row">
-      <a href="" class="btn-phone">*</a>
-      <a href="" class="btn-phone">0</a>
-      <a href="" class="btn-phone">#</a>
+      <a href="" class="btn-phone" ng-click="type('*')">*</a>
+      <a href="" class="btn-phone" ng-click="type(0)">0</a>
+      <a href="" class="btn-phone" ng-click="type('#')">#</a>
     </div>
     <div class="text-center">
-      <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumer)">call</a>
+      <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumber)">call</a>
       <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
+      <a href="" class="backspace" ng-click="erase()"><i class="fas fa-backspace"></i></a>
     </div>
 
   </div>
