@@ -152,6 +152,9 @@ angular.module('app', [])
 
   $scope.type = function(str){
     $scope.currentPhoneNumber += str;
+    if($scope.currentPhoneNumber=='0'){
+      $scope.currentPhoneNumber='+46';
+    }
   }
   $scope.erase = function(){
     $scope.currentPhoneNumber = $scope.currentPhoneNumber.slice(0,-1);
