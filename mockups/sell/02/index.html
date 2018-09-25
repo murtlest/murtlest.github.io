@@ -167,11 +167,10 @@ angular.module('app', [])
     domElement.play();
 
     $http.get('https://orders.tctc.se/phone/call?from='+escape($scope.outinnumber)+'&to='+escape($scope.currentPhoneNumber)+'&secret='+$scope.password)
-    .success(
+    .then(
       function(response){
         console.log(response);
-      }
-    ).error(
+      },
       function(error){
         console.log(error);
       }
