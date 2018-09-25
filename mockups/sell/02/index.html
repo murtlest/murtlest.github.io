@@ -166,14 +166,16 @@ angular.module('app', [])
     var domElement = document.getElementById('audio');
     domElement.play();
 
-    $http.get('https://orders.tctc.se/phone/call?from='+escape($scope.outinnumber)+'&to='escape($scope.currentPhoneNumber)+'&secret='+$scope.password).success(
+    $http.get('https://orders.tctc.se/phone/call?from='+escape($scope.outinnumber)+'&to='+escape($scope.currentPhoneNumber)+'&secret='+$scope.password)
+    .success(
       function(response){
         console.log(response);
       }
-    )
-    .error(function(error){
-      console.log(error);
-    });
+    ).error(
+      function(error){
+        console.log(error);
+      }
+    );
 
   }
 
