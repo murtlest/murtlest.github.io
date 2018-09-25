@@ -149,7 +149,7 @@ angular.module('app', [])
         $scope.incoming = true;
         $scope.ringAudio.play();
         $scope.$apply();
-        console.log(JSON.stringify($scope.session));
+        console.log(JSON.stringify($scope.session.remoteIdentity));
       }
 
       $scope.$apply();
@@ -159,6 +159,7 @@ angular.module('app', [])
 
   $scope.hangUp = function(){
     $scope.activeCall = false;
+    $scope.incoming = false;
     if($scope.session && $scope.session.status!=0){
       $scope.session.terminate();
       $scope.ringAudio.stop();
@@ -176,30 +177,6 @@ angular.module('app', [])
     $scope.activeCall = true;
     var domElement = document.getElementById('audio');
     domElement.play();
-    /*
-    $http(
-      {
-        "method":"post",
-        "withCredentials": true,
-        "headers":{ 'Authorization':  'Basic ' + btoa("test" + ":" + "test")},
-        "url":"https://api.46elks.com/a1/calls",
-        "data":{
-          voice_start: '{"connect":"'+to+'"}',
-          to: to,
-          from: $scope.outinnumber     
-        }
-      }
-    ).success(
-      function(data){
-        console.log(data);
-      }
-    ).error(
-      function(error){
-        console.log('error');
-        console.log(error);
-      }
-    );
-    */
   }
 
   $scope.type = function(str){
@@ -220,7 +197,7 @@ angular.module('app', [])
   <title>Hello, world!</title>
 </head>
 <body ng-controller="DesignMockup" ng-cloak>
-  <div id="phone" ng-class="{incoming:incoming}">
+  <div id="phone" ng-class="{incoming:incoming, active:activeCall}">
     <div id="incoming" ng-if="incoming">
       <p class="text-center">
         Incoming
@@ -239,7 +216,14 @@ angular.module('app', [])
           <input id="phoneNumber" type="text" ng-model="currentPhoneNumber" />
         </div>
     </div>
-    <div id="keys" ng-if="!incoming">
+    <div id="keys" ng-if="activeCall">
+      <div class="btn-row">
+        <a href="" class="btn-phone" ng-click="mute()"><i class="fas fa-microphone-slash"></i></a>
+        <a href="" class="btn-phone" ng-click="showKeys()"><i class="fas fa-th"></i></a>
+        <a href="" class="btn-phone" ng-click="type(3)"><i class="fas fa-volume-up"></i></a>
+      </div>      
+    </div>
+    <div id="keys" ng-if="!incoming && !activeCall">
       <div class="btn-row">
         <a href="" class="btn-phone" ng-click="type(1)">1</a>
         <a href="" class="btn-phone" ng-click="type(2)">2</a>
@@ -260,11 +244,11 @@ angular.module('app', [])
         <a href="" class="btn-phone" ng-click="type(0)">0</a>
         <a href="" class="btn-phone" ng-click="type('#')">#</a>
       </div>
-      <div class="text-center">
-        <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumber)">call</a>
-        <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
-        <a href="" class="backspace" ng-click="erase()" ng-if="currentPhoneNumber!=''"><i class="fas fa-backspace"></i></a>
-      </div>
+    </div>
+    <div ng-if="!incoming" class="text-center buttons">
+      <a href="" class="btn-call" ng-if="!activeCall" ng-click="startCall(currentPhoneNumber)">call</a>
+      <a href="" class="btn-hangup" ng-if="activeCall" ng-click="hangUp()"><i class="fas fa-times"></i></a>
+      <a href="" class="backspace" ng-click="erase()" ng-if="currentPhoneNumber!=''"><i class="fas fa-backspace"></i></a>
     </div>
 
   </div>

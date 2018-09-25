@@ -1,195 +1,3 @@
-.kgicon {
-  background: url('img/icons.png') no-repeat top left;
-  width: 28px !important;
-  height: 28px;
-  display: inline-block;
-  margin-bottom: -9px;
-}
-
-.kgicon-phone {
-  background-position: 0 0px;
-}
-.kgicon-truck {
-  background-position: 0 -30px;
-}
-.kgicon-clock {
-  background-position: 0 -58px;
-}
-.kgicon-umbrella {
-  background-position: 0 -88px;
-}
-.kgicon-box {
-  background-position: 0 -120px;
-}
-.tcicon-check-small {
-  background-position: 0 -192px;
-  width: 20px !important;
-  height: 20px;
-}
-
-
-
-
-
-#commentsBox, #customerCommentsBox {
-  width: 300px;
-  height: auto;
-  max-height: 700px;
-  display: block;
-  position: fixed;
-  right: 30px;
-  bottom: 110px;
-  background: #fff;
-  box-shadow: 1px 1px 6px #222; 
-}
-#customerCommentsBox {
-  left: 30px;
-  right: auto;
-  margin-bottom: 20px;
-}
-
-.commentsBox {
-  width: 273px;
-  height: auto;
-  max-height: 700px;
-  display: block;
-  background: #fff;
-}
-
-.panel-comment.panel {
-  border: 0;  
-}
-.panel-comment>.panel-heading {
-    color: #fff;
-    background-color: #ff0080;
-    border-color: #ff0080;
-}
-
-
-.panel-comment>.panel-heading.billogram {
-    background-color: #37bfbf;
-    border-color: #37bfbf;
-}
-
-#commentsBox .header, .commentsBox .header {
-  background: #ff0080;
-  height: 50px;
-  color: #fff;
-  line-height: 50px;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 0 20px;
-  width: 100%;
-  overflow:hidden;
-  border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-#customerCommentsBox .header {
-  background: #93bf28;
-}
-#customerCommentsBox.panel-comment>.panel-heading {
-    background-color: #93bf28;
-    border-color: #93bf28;
-}
-
-#commentsBox .footer, .commentsBox .footer {
-  position: absolute;
-  bottom: 0;
-  overflow:hidden;
-  border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-#commentsBox .panel-body, .commentsBox .panel-body {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-#commentsBox .comment, .commentsBox .comment {
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
-}
-
-#commentsBox .comment:hover, .commentsBox .comment:hover {
-  background: #eee;
-}
-  
-#commentsBox .comment:last-child, .commentsBox .comment:last-child {
-  border: 0;  
-}
-
-#commentsBox .commentHeader, .commentsBox .commentHeader {
-  font-size: 11px;
-  font-weight: bold;
-}
-
-#commentsBox .commentBody, .commentsBox .commentBody {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.panel.commentsBox {
-  margin: 0;  
-}
-
-#commentsBox .body, .commentsBox .body {
-  overflow:hidden;
-  max-height: 500px;
-  min-height: 300px;
-  overflow-y: scroll;
-}
-  
-#commentsToggler, #customerCommentsToggler {
-  width: 70px;
-  height: 70px;
-  display: block;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  font-size: 30px;
-  line-height: 80px;
-  text-align: center;
-  color: #fff;
-  border-radius: 50%;
-  background-color: #777;
-  box-shadow: 1px 1px 6px #222; 
-}
-
-#commentsToggler.hasComments {
-  background: #ff33a0;
-}
-#commentsToggler:hover {
-  box-shadow: 1px 1px 4px #000;
-  background: #ff0080;
-}
-
-#customerCommentsToggler {
-  left: 30px;
-  right: auto;
-}
-#customerCommentsToggler.hasComments {
-  background: #93bf28;
-}
-#customerCommentsToggler:hover {
-  box-shadow: 1px 1px 4px #000;
-  background: #89b127;
-}
-
-
-.popoverComments + .popover .popover-content {
-  padding: 0;
-  margin: 0;
-}
-.popoverComments + .popover {
-  padding: 0;
-  border: 0;
-  margin: 0;
-}
-
-
-
-
-
-
 
 
 body {
@@ -229,6 +37,16 @@ body {
   animation: incomingBg 2s ease infinite;
 }
 
+#phone.active {
+  background: linear-gradient(270deg, #d6f5ed, #f6e8ff);
+  background-size: 200% 200%;
+
+  -webkit-animation: incomingBg 2s ease infinite;
+  -moz-animation: incomingBg 2s ease infinite;
+  animation: incomingBg 2s ease infinite;
+}
+
+
 #incoming {
   height: 100%;
   font-size: 28px;
@@ -236,10 +54,10 @@ body {
   padding-top: 80px;
 }
 
-#incoming .buttons {
+.buttons {
   width: 100%;
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
 }
 
 #phoneNumber {
@@ -265,7 +83,7 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  background: rgba(60,60,60,0.8);
+  background: rgba(60,60,60,0.4);
   color: #fff;
   text-align: center;
   vertical-align: middle;
