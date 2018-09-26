@@ -41,7 +41,14 @@ angular.module('app', [])
   $scope.holding = false;
 
   $scope.mute = function(){
-    $scope.muted = !$scope.muted;
+    if($scope.muted){
+      $scope.muted=false;
+      $scope.session.unmute();
+    }else{
+        $scope.muted = true;
+        $scope.session.mute();  
+    }
+    
   }
 
   $scope.hold = function(){
