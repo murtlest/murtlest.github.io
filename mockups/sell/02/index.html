@@ -255,8 +255,10 @@ angular.module('app', [])
 
 
   $scope.getDuration = function(){
-    if($scope.session.endTime && $scope.session.startTime){
-      var duration = $scope.session.endTime - $scope.session.startTime;
+    if($scope.session && $scope.session.startTime){
+      var endTime = new Date();
+
+      var duration = endTime - $scope.session.startTime;
       duration = duration/1000/60/60;
 
       var hours = parseInt(duration);
