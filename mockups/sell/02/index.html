@@ -46,6 +46,7 @@ angular.module('app', [])
     if($scope.holding){
       $scope.session.unhold();
       $scope.holding = false;
+      $scope.addSound();
     }else{
       $scope.holding = true;
       $scope.session.hold();
@@ -134,12 +135,14 @@ angular.module('app', [])
       if(_.indexOf($scope.ownNumbers, $scope.session.remoteIdentity.uri.user)>-1){
         console.log('self initiated call');
         $scope.session.accept();
+        console.log($scope.session);
       }
       // In other case play ringtone.
       else {
         console.log('incoming call');
         $scope.incoming = true;
         $scope.ringAudio.play();
+        console.log($scope.session);
         $scope.$apply();
         console.log(JSON.stringify($scope.session.remoteIdentity));
       }
@@ -225,8 +228,8 @@ angular.module('app', [])
 
 
   $scope.getDuration = function(){
-    if($scope.endTime && $scope.startTime){
-      var duration = $scope.endTime - $scope.startTime;
+    if($scope.session.endTime && $scope.session.startTime){
+      var duration = $scope.session.endTime - $scope.session.startTime;
       duration = duration/1000/60/60;
 
       var hours = parseInt(duration);
