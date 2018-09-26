@@ -47,8 +47,8 @@ angular.module('app', [])
   $scope.hold = function(){
     if($scope.holding){
       $scope.session.unhold();
+      $scope.session.reinvite();
       $scope.holding = false;
-      $scope.addSound();
     }else{
       $scope.holding = true;
       $scope.session.hold();
