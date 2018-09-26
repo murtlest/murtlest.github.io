@@ -70,6 +70,14 @@ body {
   text-align: center;
 }
 
+.duration {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: 100;
+}
+
 #incoming {
   height: 100%;
   font-size: 28px;
@@ -99,6 +107,7 @@ body {
 }
 .btn-row {
   margin: 10px 45px;
+  text-align: center;
 }
 
 .btn-phone {
@@ -118,10 +127,16 @@ body {
 .btn-phone:last-child {
   margin-right: 0;
 }
+.btn-phone.active {
+  background: rgba(200,0,0,0.3);
+}
 .btn-phone:hover {
   background: rgba(60,60,60,1);
   color: #fff;
   text-decoration: none;
+}
+.btn-phone.active:hover {
+  background: rgba(200,80,80,0.8);
 }
 
 .backspace {

@@ -20,7 +20,7 @@ angular.module('app', [])
   $scope.loggedIn = false;
 
   $scope.currentPhoneNumber = '+46709515359';
-  $scope.activeCall = false;
+  $scope.activeCall = true;
   $scope.incoming = false;
 
   $scope.outInNumbers = {
@@ -34,6 +34,12 @@ angular.module('app', [])
   $scope.session = {"status":0};
 
   $scope.password = '';
+
+  $scope.muted = false;
+
+  $scope.mute = function(){
+    $scope.muted = !$scope.muted;
+  }
 
   $scope.login = function(password){
     $scope.loggedIn = true;
@@ -87,7 +93,7 @@ angular.module('app', [])
         console.log(message);
         $scope.activeCall = false;
         $scope.incoming = false;
-        
+
         $scope.$apply();
       });
       $scope.session.on('cancel', function(message){
@@ -203,6 +209,15 @@ angular.module('app', [])
     $scope.currentPhoneNumber = $scope.currentPhoneNumber.slice(0,-1);
   }
 
+  $scope.getDuration = function(){
+    if($scope.session && $scope.session.endTime && $scope.session.startTime){
+      var duration = $scope.session.endTime - $scope.session.startTime;
+      duration = duration/1000;
+      return parseInt(duration);
+    }
+    return "00:00";
+  }
+
 }]);
 </script>
 
@@ -246,12 +261,20 @@ angular.module('app', [])
           <input id="phoneNumber" type="text" ng-model="currentPhoneNumber" />
         </div>
     </div>
+    <div class="row duration" ng-if="activeCall && !incoming && loggedIn">
+      <div class="col">
+        {{ getDuration() }}
+      </div>
+    </div>
     <div id="keys" ng-if="activeCall && !incoming && loggedIn">
       <div class="btn-row">
-        <a href="" class="btn-phone" ng-click="mute()"><i class="fas fa-microphone-slash"></i></a>
+        <a href="" class="btn-phone" ng-class="{active:muted}" ng-click="mute()"><i class="fas fa-microphone-slash"></i></a>
         <a href="" class="btn-phone" ng-click="showKeys()"><i class="fas fa-th"></i></a>
         <a href="" class="btn-phone" ng-click="type(3)"><i class="fas fa-volume-up"></i></a>
-      </div>      
+      </div>
+      <div class="btn-row">
+        <a href="" class="btn-phone" ng-click="transfer()"><i class="fas fa-sign-out-alt"></i></a>
+      </div>     
     </div>
     <div id="keys" ng-if="!incoming && !activeCall && loggedIn">
       <div class="btn-row">
