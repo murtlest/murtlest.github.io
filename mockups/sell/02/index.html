@@ -145,7 +145,10 @@ angular.module('app', [])
         $scope.incoming = true;
         $scope.ringAudio.play();
         console.log($scope.session);
-        $scope.incomingNumber = $scope.session.remoteIdentity.uri.friendlyName;
+        setTimeout(function(){
+            $scope.incomingNumber = $scope.session.remoteIdentity.uri.friendlyName;
+        },100);
+        
         $scope.$apply();
         console.log(JSON.stringify($scope.session.remoteIdentity));
       }
