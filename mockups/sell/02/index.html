@@ -23,6 +23,8 @@ angular.module('app', [])
   $scope.activeCall = false;
   $scope.incoming = false;
 
+  $scope.incomingNumber = '';
+
   $scope.outInNumbers = {
     "1":{id:1, number:"+46766860672"},
     "2":{id:2, number:"+46101994035"}
@@ -143,6 +145,7 @@ angular.module('app', [])
         $scope.incoming = true;
         $scope.ringAudio.play();
         console.log($scope.session);
+        $scope.incomingNumber = $scope.session.remoteIdentity.uri.getFriendlyName();
         $scope.$apply();
         console.log(JSON.stringify($scope.session.remoteIdentity));
       }
@@ -266,7 +269,10 @@ angular.module('app', [])
   <div id="settings">
     <label for="number">My Number</label>
     <select class="form-control" ng-model="selectedOutInNumber" ng-options="option.number for option in outInNumbers track by option.id"></select>
+    <br />
     <button class="btn" ng-click="updateEndTime()">Update endTime</button>
+    <br />
+    {{ incomingNumber }}
   </div>
 
 
@@ -285,7 +291,7 @@ angular.module('app', [])
         Incoming
       </p>
       <p class="text-center">
-        <big>+46 709 51 53 59</big>
+        <big>{{ incomingNumber }}</big>
       </p>
 
       <div class="text-center buttons">
