@@ -43,10 +43,10 @@ angular.module('app', [])
   $scope.mute = function(){
     if($scope.muted){
       $scope.muted=false;
-      $scope.session.unmute();
+      $scope.unMuteTracks();
     }else{
         $scope.muted = true;
-        $scope.session.mute();  
+        $scope.muteTracks();  
     }
     
   }
@@ -176,21 +176,35 @@ angular.module('app', [])
   $scope.ringAudio.loop = true;
 
 
+  $scope.stream = false;
+
     // Add sound from the remote caller to the browser.
   $scope.addSound = function(){
     var domElement = document.getElementById('audio');
     var pc = $scope.session.sessionDescriptionHandler.peerConnection;
-    var remoteStream = new MediaStream();
+    $scope.stream = new MediaStream();
     pc.getReceivers().forEach(
       function(receiver) {
         var track = receiver.track;
         if (track) {
-          remoteStream.addTrack(track);
+          $scope.stream.addTrack(track);
         }
       }
     );
-    domElement.srcObject = remoteStream;
+    domElement.srcObject = $scope.stream;
     domElement.play();
+  }
+
+  $scope.muteTracks = function(){
+    $scope.stream.getTracks().forEach(function(track){
+      track.enabled = false;
+    });
+  }
+
+  $scope.unMuteTracks = function(){
+    $scope.stream.getTracks().forEach(function(track){
+      track.enabled = true;
+    }); 
   }
 
   
