@@ -152,7 +152,7 @@ angular.module('app', [])
     $scope.incoming = false;
     if($scope.session && $scope.session.status!=0){
       $scope.session.terminate();
-      $scope.ringAudio.stop();
+      $scope.ringAudio.pause();
     }
   }
 
