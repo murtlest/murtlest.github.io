@@ -87,6 +87,8 @@ angular.module('app', [])
         console.log(message);
         $scope.activeCall = false;
         $scope.incoming = false;
+        
+        $scope.$apply();
       });
       $scope.session.on('cancel', function(message){
         console.log('cancel');
